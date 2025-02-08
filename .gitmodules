@@ -1,0 +1,6 @@
+[submodule "vendor/ckastal"]
+	path = vendor/ckastal
+	url = https://github.com/buebos/ckastal
+[submodule "vendor/clogg"]
+	path = vendor/clogg
+	url = https://github.com/buebos/clogg
