@@ -1,0 +1,7 @@
+fn main(argc: int, argv: string[]) -> void {
+    message := "hello world from zorst"
+
+    for i := range(message.length) {
+        print(message[i])
+    }
+}
