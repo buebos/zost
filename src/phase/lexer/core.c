@@ -7,10 +7,23 @@
 
 const short LEXER_TOKEN_BUFFER_SIZE = 1024;
 
+typedef struct Lexer Lexer;
+
+typedef struct LexerState {
+    struct LexerState (*run)(Lexer*);
+} LexerState;
+typedef LexerState (*LexerStateRunFn)(Lexer*);
+
 typedef struct Lexer {
     Scanner* _scanner;
     Lexeme _current;
+    LexerState _last_state;
 } Lexer;
+
+LexerState _lextate(LexerStateRunFn caller) {
+    LexerState state = {.run = caller};
+    return state;
+}
 
 Lexer lexer_init(Scanner* scanner) {
     char* buffer = ck_memory.alloc(sizeof(char) * LEXER_TOKEN_BUFFER_SIZE);
@@ -20,6 +33,7 @@ Lexer lexer_init(Scanner* scanner) {
             .kind = LEX_KIND_INCOMPLETE,
             .value = ck_lenstr_init(buffer, LEXER_TOKEN_BUFFER_SIZE, 0),
         },
+        ._last_state = {.run = NULL},
     };
 
     return lexer;
@@ -57,7 +71,10 @@ Lexeme* lexer_next(Lexer* lexer) {
         return NULL;
     }
 
-    LexerState state = _lextate(lexer_state_start);
+    LexerState state =
+        lexer->_last_state.run != NULL
+            ? lexer->_last_state
+            : _lextate(lexer_state_start);
 
     lexer->_current = (Lexeme){
         .kind = LEX_KIND_INCOMPLETE,
@@ -69,6 +86,8 @@ Lexeme* lexer_next(Lexer* lexer) {
     while (NULL != state.run && LEX_KIND_INCOMPLETE == lexer_last(lexer).kind) {
         state = state.run(lexer);
     }
+
+    lexer->_last_state = state;
 
     return &lexer->_current;
 }

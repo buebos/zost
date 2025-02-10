@@ -1,7 +1,7 @@
-#include "src/phase/lexer/main.c"
-
 #include <stdio.h>
 
+#include "src/phase/lexer/core.c"
+#include "src/service/scanner/provider/file.c"
 #include "vendor/ckastal/include/syntax_utils.h"
 
 int main(int argc, char** argv) {
@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
     FILE* source_file = fopen(cli_get(&cli, "filename"), "r");
     Status status = {0};
 
-    Scanner source_scanner = scanner_init(source_file);
+    Scanner source_scanner = scanner_file_init(source_file);
     Lexer lexer = lexer_init(&source_scanner, &status);
 
     Ast ast = ast_init();

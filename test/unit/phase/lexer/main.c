@@ -13,7 +13,8 @@ int main(void) {
     Lexeme* lexeme = NULL;
 
     while ((lexeme = lexer_next(&lexer)) && lexeme->kind != LEX_KIND_EOF) {
-        assert(lexeme->kind == LEX_KIND_LITERAL_NUMBER);
+        lexeme_printf(lexeme);
+        printf("\n");
     }
 
     fclose((FILE*)scanner._source);
