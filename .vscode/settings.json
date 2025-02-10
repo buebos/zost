@@ -17,6 +17,7 @@
     "queue": "c",
     "stack": "c",
     "execution": "c",
-    "syntax_utils.h": "c"
+    "syntax_utils.h": "c",
+    "stdlib.h": "c"
   },
 }

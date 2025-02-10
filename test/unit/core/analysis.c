@@ -7,30 +7,30 @@
 #include "../../../vendor/clogg/src/clogg.c"
 
 int main(void) {
-    assert(strcmp("LITERAL_STRING", token_kind_to_str(TOKEN_KIND_LITERAL_STRING)) == 0);
-    assert(strcmp("ASSIGN", token_kind_to_str(TOKEN_KIND_ASSIGN)) == 0);
-    assert(strcmp("DIVIDE", token_kind_to_str(TOKEN_KIND_DIVIDE)) == 0);
+    assert(strcmp("LITERAL_STRING", lexeme_kind_to_str(LEX_KIND_LITERAL_STRING)) == 0);
+    assert(strcmp("ASSIGN", lexeme_kind_to_str(LEX_KIND_ASSIGN)) == 0);
+    assert(strcmp("DIVIDE", lexeme_kind_to_str(LEX_KIND_DIVIDE)) == 0);
 
-    token_printf(&(Token){
-        .kind = TOKEN_KIND_AND,
+    lexeme_printf(&(Lexeme){
+        .kind = LEX_KIND_AND,
         .value = ck_lenstr_init(ck_lenstr_slp("=")),
     });
     printf("\n");
 
-    token_printf(&(Token){
-        .kind = TOKEN_KIND_SYMBOL,
+    lexeme_printf(&(Lexeme){
+        .kind = LEX_KIND_SYMBOL,
         .value = ck_lenstr_init(ck_lenstr_slp("username")),
     });
     printf("\n");
 
-    token_printf(&(Token){
-        .kind = TOKEN_KIND_EOF,
+    lexeme_printf(&(Lexeme){
+        .kind = LEX_KIND_EOF,
         .value = ck_lenstr_init(ck_lenstr_slp("EOF")),
     });
     printf("\n");
 
-    token_printf(&(Token){
-        .kind = TOKEN_KIND_ERROR,
+    lexeme_printf(&(Lexeme){
+        .kind = LEX_KIND_ERROR,
         .value = ck_lenstr_init(ck_lenstr_slp("/fdal\\dsa/")),
     });
     printf("\n");

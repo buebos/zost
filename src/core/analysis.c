@@ -6,44 +6,46 @@
 #include "../../vendor/ckastal/include/prefixed_length_string.c"
 #include "../../vendor/ckastal/include/syntax_utils.h"
 
-enum_str_setup(TokenKind,
-               "TOKEN_KIND",
-               TOKEN_KIND_STRINGS,
-               token_kind_to_str,
+enum_str_setup(LexemeKind,
+               "LEX_KIND",
+               LEX_KIND_STRINGS,
+               lexeme_kind_to_str,
                /** This will start as set to zero in the enum */
-               TOKEN_KIND_ERROR,
-               /** Other error or aside of language token types */
-               (TOKEN_KIND_UNKNOWN)(TOKEN_KIND_EOF)
+               LEX_KIND_INCOMPLETE,
+               /** Other error or aside of language lexeme types */
+               (LEX_KIND_ERROR)(LEX_KIND_UNKNOWN)(LEX_KIND_EOF)
 
                /* Comments */
-               (TOKEN_KIND_COMMENT_LINE_START)(TOKEN_KIND_COMMENT_BLOCK_START)
+               (LEX_KIND_COMMENT_LINE_START)(LEX_KIND_COMMENT_BLOCK_START)
                /** Arithmetical operators */
-               (TOKEN_KIND_PLUS)(TOKEN_KIND_MINUS)(TOKEN_KIND_MULTIPLY)(TOKEN_KIND_DIVIDE)(TOKEN_KIND_POWER)
+               (LEX_KIND_ARITHMETIC_OPERATOR)
                /** Logical operators */
-               (TOKEN_KIND_EQUALS)(TOKEN_KIND_GT)(TOKEN_KIND_GTE)(TOKEN_KIND_LT)(TOKEN_KIND_LTE)(TOKEN_KIND_OR)(TOKEN_KIND_AND)
+               (LEX_KIND_EQUALS)(LEX_KIND_GT)(LEX_KIND_GTE)(LEX_KIND_LT)(LEX_KIND_LTE)(LEX_KIND_OR)(LEX_KIND_AND)
                /** Delimiters  */
-               (TOKEN_KIND_NEW_LINE)(TOKEN_KIND_BLANK_SPACE)(TOKEN_KIND_SEMICOLON)(TOKEN_KIND_PAREN_OPEN)(TOKEN_KIND_PAREN_CLOSE)(TOKEN_KIND_SQUARE_OPEN)(TOKEN_KIND_SQUARE_CLOSE)(TOKEN_KIND_CURLY_OPEN)(TOKEN_KIND_CURLY_CLOSE)(TOKEN_KIND_COMMA)(TOKEN_KIND_DOT)(TOKEN_KIND_ASSIGN)(TOKEN_KIND_ASSIGN_INFER)(TOKEN_KIND_COLON)
+               (LEX_KIND_NEW_LINE)(LEX_KIND_BLANK_SPACE)(LEX_KIND_SEMICOLON)(LEX_KIND_PAREN_OPEN)(LEX_KIND_PAREN_CLOSE)(LEX_KIND_SQUARE_OPEN)(LEX_KIND_SQUARE_CLOSE)(LEX_KIND_CURLY_OPEN)(LEX_KIND_CURLY_CLOSE)(LEX_KIND_COMMA)(LEX_KIND_DOT)(LEX_KIND_ASSIGN)(LEX_KIND_ASSIGN_INFER)(LEX_KIND_COLON)
                /** Reserved keywords */
-               (TOKEN_KIND_IF)(TOKEN_KIND_FN)
+               (LEX_KIND_IF)(LEX_KIND_FN)
                /** Variable values */
-               (TOKEN_KIND_SYMBOL)(TOKEN_KIND_LITERAL_STRING)(TOKEN_KIND_LITERAL_NUMBER));
+               (LEX_KIND_SYMBOL)(LEX_KIND_LITERAL_STRING)(LEX_KIND_LITERAL_NUMBER));
 
-typedef struct Token {
-    TokenKind kind;
+typedef struct Lexeme {
+    LexemeKind kind;
     Ck_LenStr value;
-} Token;
+} Lexeme;
 
-void token_printf(Token* tok) {
-    if (tok->kind == TOKEN_KIND_EOF) {
-        printf("<Token EOF>");
-        return;
-    }
-    if (tok->kind <= TOKEN_KIND_FN) {
-        printf("<Token %s '%s'>", token_kind_to_str(tok->kind), tok->value._str);
+void lexeme_printf(Lexeme* lexeme) {
+    if (lexeme->kind == LEX_KIND_EOF) {
+        printf("<Lexeme EOF>");
         return;
     }
 
-    printf("<Token %s '%.10s'>", token_kind_to_str(tok->kind), tok->value._str);
+    printf("<Lexeme %s ", lexeme_kind_to_str(lexeme->kind));
+
+    if (lexeme->value._length <= 10) {
+        printf("'%.*s'>", (int)lexeme->value._length, lexeme->value._str);
+    } else {
+        printf("'%.10s...'>", lexeme->value._str);
+    }
 }
 
 #endif /** __ZOST_CORE_ANALYSIS_C__ */
