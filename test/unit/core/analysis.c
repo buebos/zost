@@ -9,7 +9,7 @@
 int main(void) {
     assert(strcmp("LITERAL_STRING", lexeme_kind_to_str(LEX_KIND_LITERAL_STRING)) == 0);
     assert(strcmp("ASSIGN", lexeme_kind_to_str(LEX_KIND_ASSIGN)) == 0);
-    assert(strcmp("DIVIDE", lexeme_kind_to_str(LEX_KIND_DIVIDE)) == 0);
+    assert(strcmp("ARITHMETIC_OPERATOR", lexeme_kind_to_str(LEX_KIND_ARITHMETIC_OPERATOR)) == 0);
 
     lexeme_printf(&(Lexeme){
         .kind = LEX_KIND_AND,

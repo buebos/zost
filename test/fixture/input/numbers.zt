@@ -10,7 +10,10 @@
 3;
 4
 5;
-
+// This is a comment inline
+/**
+* This is a comment block
+**/
 3.141592
 (
 0;1;2;3;4;5

@@ -8,6 +8,8 @@ LexerState lexer_state_literal_int(Lexer* lexer);
 LexerState lexer_state_literal_float(Lexer* lexer);
 LexerState lexer_state_arithmetic_operator(Lexer* lexer);
 LexerState lexer_state_paren_opened(Lexer* lexer);
+LexerState lexer_state_comment_inline(Lexer* lexer);
+LexerState lexer_state_comment_block(Lexer* lexer);
 // LexerState lexer_state_alphabetic(Lexer* lexer);
 // LexerState lexer_state_inside_string(Lexer* lexer);
 
@@ -24,6 +26,19 @@ LexerState lexer_state_start(Lexer* lexer) {
     if (c == EOF) {
         lexer_emit(lexer, LEX_KIND_EOF);
         return _lextate(NULL);
+    }
+
+    /**
+     * Comments check if the char pattern matches the opening for a comment
+     * and if it does then skips the char.
+     */
+    if (c == '/' && scanner->peek(scanner) == '/') {
+        scanner->next(scanner);
+        return _lextate(lexer_state_comment_inline);
+    }
+    if (c == '/' && scanner->peek(scanner) == '*') {
+        scanner->next(scanner);
+        return _lextate(lexer_state_comment_block);
     }
 
     if (c == '/' || c == '*' || c == '%') {
@@ -196,6 +211,26 @@ LexerState lexer_state_paren_opened(Lexer* lexer) {
     }
 
     lexer_emit(lexer, LEX_KIND_PAREN_OPEN);
+
+    return _lextate(lexer_state_start);
+}
+
+LexerState lexer_state_comment_inline(Lexer* lexer) {
+    Scanner* scanner = lexer->_scanner;
+    char c = 0;
+
+    while ((c = scanner->next(scanner)) != '\n');
+
+    return _lextate(lexer_state_start);
+}
+
+LexerState lexer_state_comment_block(Lexer* lexer) {
+    Scanner* scanner = lexer->_scanner;
+    char c = 0;
+
+    while ((c = scanner->next(scanner)) != '*' || scanner->peek(scanner) != '/');
+
+    scanner->next(scanner);
 
     return _lextate(lexer_state_start);
 }
