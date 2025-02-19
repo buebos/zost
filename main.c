@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
     Status status = {0};
 
     Scanner source_scanner = scanner_file_init(source_file);
-    Lexer lexer = lexer_init(&source_scanner, &status);
+    Lexer lexer = lexer_init(&source_scanner);
 
     Ast ast = ast_init();
 

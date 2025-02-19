@@ -1,5 +1,5 @@
-#ifndef __ZORST_PHASE_LEXER_STATE_C__
-#define __ZORST_PHASE_LEXER_STATE_C__
+#ifndef __ZOST_PHASE_LEXER_STATE_C__
+#define __ZOST_PHASE_LEXER_STATE_C__
 
 #include "core.c"
 
@@ -113,7 +113,7 @@ LexerState lexer_state_literal_int(Lexer* lexer) {
 
     ) {
         if ((c == '+' || c == '-') && previous_char >= '0' && previous_char <= '9') {
-            lexer_emit(lexer, LEX_KIND_LITERAL_NUMBER);
+            lexer_emit(lexer, LEX_KIND_LITERAL_INT);
             return _lextate(lexer_state_arithmetic_operator);
         }
 
@@ -137,16 +137,16 @@ LexerState lexer_state_literal_int(Lexer* lexer) {
     }
 
     if (c == '/' || c == '*' || c == '%') {
-        lexer_emit(lexer, LEX_KIND_LITERAL_NUMBER);
+        lexer_emit(lexer, LEX_KIND_LITERAL_INT);
         return _lextate(lexer_state_arithmetic_operator);
     }
     if (c == '+' || c == '-' || (c >= '0' && c <= '9')) {
-        lexer_emit(lexer, LEX_KIND_LITERAL_NUMBER);
+        lexer_emit(lexer, LEX_KIND_LITERAL_INT);
         return _lextate(lexer_state_literal_int);
     }
 
     if (c == ' ' || c == '\n' || c == '\t' || c == ';') {
-        lexer_emit(lexer, LEX_KIND_LITERAL_NUMBER);
+        lexer_emit(lexer, LEX_KIND_LITERAL_INT);
         return _lextate(lexer_state_start);
     }
 
@@ -175,15 +175,15 @@ LexerState lexer_state_literal_float(Lexer* lexer) {
     }
 
     if (c == '+' || c == '-' || c == '/' || c == '*' || c == '%') {
-        lexer_emit(lexer, LEX_KIND_LITERAL_NUMBER);
+        lexer_emit(lexer, LEX_KIND_LITERAL_INT);
         return _lextate(lexer_state_arithmetic_operator);
     }
     if (c >= '0' && c <= '9') {
-        lexer_emit(lexer, LEX_KIND_LITERAL_NUMBER);
+        lexer_emit(lexer, LEX_KIND_LITERAL_INT);
         return _lextate(lexer_state_start);
     }
     if (c == ' ' || c == '\n' || c == '\t' || c == ';') {
-        lexer_emit(lexer, LEX_KIND_LITERAL_NUMBER);
+        lexer_emit(lexer, LEX_KIND_LITERAL_INT);
         return _lextate(lexer_state_start);
     }
 
@@ -207,7 +207,7 @@ LexerState lexer_state_paren_opened(Lexer* lexer) {
 
     if (c == ';') {
         lexer_emit(lexer, LEX_KIND_ERROR);
-        _lextate(NULL);
+        return _lextate(NULL);
     }
 
     lexer_emit(lexer, LEX_KIND_PAREN_OPEN);
@@ -235,4 +235,4 @@ LexerState lexer_state_comment_block(Lexer* lexer) {
     return _lextate(lexer_state_start);
 }
 
-#endif /* __ZORST_PHASE_LEXER_STATE_C__ */
+#endif /* __ZOST_PHASE_LEXER_STATE_C__ */

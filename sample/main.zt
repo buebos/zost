@@ -1,5 +1,5 @@
 fn main(argc: int, argv: string[]) -> void {
-    message := "hello world from zorst"
+    message := "hello world from zost"
 
     for i := range(message.length) {
         print(message[i])
