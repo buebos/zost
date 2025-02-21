@@ -5,7 +5,7 @@
 #include "../../core/analysis.c"
 #include "../../service/scanner/provider/file.c"
 
-const short LEXER_TOKEN_BUFFER_SIZE = 1024;
+const short LEXER_LEXEME_BUFFER_SIZE = 1024;
 
 typedef struct Lexer Lexer;
 
@@ -26,12 +26,12 @@ LexerState _lextate(LexerStateRunFn caller) {
 }
 
 Lexer lexer_init(Scanner* scanner) {
-    char* buffer = ck_memory.alloc(sizeof(char) * LEXER_TOKEN_BUFFER_SIZE);
+    char* buffer = ck_memory.alloc(sizeof(char) * LEXER_LEXEME_BUFFER_SIZE);
     Lexer lexer = {
         ._scanner = scanner,
         ._current = (Lexeme){
             .kind = LEX_KIND_INCOMPLETE,
-            .value = ck_lenstr_init(buffer, LEXER_TOKEN_BUFFER_SIZE, 0),
+            .value = ck_lenstr_init(buffer, LEXER_LEXEME_BUFFER_SIZE, 0),
         },
         ._last_state = {.run = NULL},
     };
