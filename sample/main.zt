@@ -1,4 +1,4 @@
-fn main(argc: int, argv: string[]) -> void {
+fn main(int argc, string[] argv) -> void {
     message := "hello world from zost"
 
     for i := range(message.length) {
